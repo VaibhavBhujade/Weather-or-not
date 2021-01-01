@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="../static/index.css">
+</head>
+
+<body>
+    <!-- Displaying flash messages from flask -->
+    {% with messages = get_flashed_messages() %}  
+         {% if messages %}  
+               {% for message in messages %}  
+                    <p>{{ message }}</p>  
+               {% endfor %}  
+        {% endif %}  
+    {% endwith %} 
+
+    
+    <div class="blank"> 
+        <p>Get Real Time Weather Updates</p>
+    </div>
+    <div class="header">
+        <h1>Weather or Not</h1>
+    </div>
+
+    {% if error %}
+        <p class="error"><strong>Error:</strong> {{ error }}
+    {% endif %} 
+       
+    </div>
+
+    <!-- Input form for place and language -->
+   <form method="post" class ="form-inline">
+        <label for="place" style="color:white"><b>Place</b></label>
+        <input type="text" name="place"
+               placeholder="City" class="form-control"
+               value="{{ request.form['place'] }}"></input>
+
+        <select id="lang" name="lang" >
+            <option value="en">English</option>
+            <option value="hi">Hindi</option>
+            <option value="mr">Marathi</option>
+          </select>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+
+   </form>
+   {% block body %}
+
+   <!-- Display temperature, weather and corresponding icon for queried place -->
+   <div class="main">
+        <div class="place">
+            <h1>{{ place['location']['name'] }}, {{ place['location']['country'] }}</h1>
+            <h1>{{ place['current']['condition']['text'] }}</h1>
+        </div>
+        <div class="temp">
+            <h1>{{ place['current']['temp_c'] }} °C</h1> 
+            <img src= {{ place['current']['condition']['icon'] }} alt="Icon" width="150" height="150">
+        </div>
+    </div>
+    <!-- Display weather report -->
+    <center>
+        <div class ="container">
+            <h4><b>Weather Report</b></h4>
+            <div class="row">
+                <div class="col">
+                    <div class="card">
+                            <h4><b>Humidity</b></h4> 
+                                <p>{{ place['current']['humidity'] }}</p> 
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <h4><b>Precipitation</b></h4> 
+                        <p>{{ place['current']['precip_mm'] }} mm</p> 
+
+                    </div>
+                </div>
+            </div>
+            <div class ="row">
+                <div class="col">
+                    <div class="card">
+                            <h4><b>Feels like</b></h4> 
+                                <p>{{ place['current']['feelslike_c'] }} °C</p> 
+                    </div>
+                </div>
+                <div class ="col">
+                    <div class="card">
+                            <h4><b>Wind Speed</b></h4> 
+                                <p>{{ place['current']['wind_kph'] }} kph</p>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <!-- Display Three Day Forecast Overview-->
+        <div>
+            <h1 style="color: aliceblue">3-day weather forecast</h1>
+            <div class ="row2">
+                {% for i in range(0,3) %}
+                <div class="col2">  
+                    <div class="card2">
+                        <div>{{forecast['forecast']['forecastday'][i]['date']}}</div>
+                        <div>{{forecast['forecast']['forecastday'][i]['day']['condition']['text']}}</div>
+                        <div><img src= {{ forecast['forecast']['forecastday'][i]['day']['condition']['icon'] }} 
+                            alt="Icon" width="80" height="80"></div>
+                        <div>{{forecast['forecast']['forecastday'][i]['day']['maxtemp_c']}}/
+                            {{forecast['forecast']['forecastday'][i]['day']['mintemp_c']}}</div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+       
+    </center>
+    
+   {% endblock %}
+   <!-- API credits -->
+   <div style="color: azure;">Powered by <a href="https://www.weatherapi.com/" title="Free Weather API">WeatherAPI.com</a></div>
+</body>
+</html>
