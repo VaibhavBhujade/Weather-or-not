@@ -20,7 +20,7 @@ Weather or Not is a simple weather app which fetches data from an API to display
 2. Navigate to the project folder WeatherOrNot
 3. Install the dependencies by running `pip install -r requirements.txt`
 4. Install flask `pip install flask`
-
+5. Get API key from <a href="https://www.weatherapi.com/" title="Free Weather API">WeatherAPI.com</a> and assign it in `constants.py
 
 ### To run
 1. Run command `flask run`
